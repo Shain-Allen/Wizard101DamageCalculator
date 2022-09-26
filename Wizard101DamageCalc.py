@@ -1,4 +1,3 @@
-from importlib.metadata import files
 import tkinter as tk
 
 class Spell:
