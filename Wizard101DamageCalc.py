@@ -1,4 +1,8 @@
+from math import floor
 import tkinter as tk
+import json
+
+from numpy import imag
 
 class Spell:
 	def __init__(self, cardName, imgFile, school):
@@ -22,88 +26,98 @@ class DebuffingSpell(Spell):
 		Spell.__init__(self, cardName, imgFile, school)
 		self.damageDebuff = damageDebuff
 
+CardDataBank = json.load(open("Cards.json"))
 
 root = tk.Tk()
 
-root.configure(height=1280, width=720)
+MAXWINDOWWIDTH = 720
+MAXWINDOWHEIGHT = 1280
+
+root.configure(height=MAXWINDOWHEIGHT, width=MAXWINDOWWIDTH)
 
 # create Containers
-title = tk.Frame(root, borderwidth=1, relief="solid", height=80, width=720)
-damageOutput = tk.Frame(root, width=720)
-cardSelection = tk.Frame(root, height=1000, width=720)
-attackCards = tk.Canvas(cardSelection, borderwidth=2, relief="solid")
-modifications = tk.Frame(cardSelection)
-buffs = tk.Canvas(modifications, borderwidth=2, relief="solid")
-debuffs = tk.Canvas(modifications, borderwidth=2, relief="solid")
-incBoost_Resist = tk.Canvas(modifications, borderwidth=2, relief="solid")
-armorStats = tk.Frame(modifications, borderwidth=2, relief="solid")
+titleFrame = tk.Frame(root, borderwidth=1, relief="solid", height=80, width=MAXWINDOWWIDTH)
+damageOutputFrame = tk.Frame(root, width=MAXWINDOWWIDTH)
+cardSelectionFrame = tk.Frame(root, height=1000, width=MAXWINDOWWIDTH)
+attackCardsCanvas = tk.Canvas(cardSelectionFrame,width=MAXWINDOWWIDTH/2 , borderwidth=2, relief="solid")
+modificationsFrame = tk.Frame(cardSelectionFrame)
+buffsCanvas = tk.Canvas(modificationsFrame, borderwidth=2, relief="solid")
+debuffsCanvas = tk.Canvas(modificationsFrame, borderwidth=2, relief="solid")
+incBoost_ResistCanvas = tk.Canvas(modificationsFrame, borderwidth=2, relief="solid")
+armorStatsFrame = tk.Frame(modificationsFrame, borderwidth=2, relief="solid")
 
 # Title creation
-titleLabel = tk.Label(title, text="Wizard 101 Damage Calculator", justify=tk.CENTER)
+titleLabel = tk.Label(titleFrame, text="Wizard 101 Damage Calculator", justify=tk.CENTER)
 
-# DamageOutput
-damageMinVar = tk.StringVar(damageOutput)
+# DamageOutputFrame
+damageMinVar = tk.StringVar(damageOutputFrame)
 damageMinVar.set("0")
 
-damageMaxVar = tk.StringVar(damageOutput)
+damageMaxVar = tk.StringVar(damageOutputFrame)
 damageMaxVar.set("0")
 
-effectHistoryVar = tk.StringVar(damageOutput)
+effectHistoryVar = tk.StringVar(damageOutputFrame)
 effectHistoryVar.set("")
 
 damageMin = tk.Label(
-	damageOutput, textvariable=damageMinVar, borderwidth=2, relief="solid"
+	damageOutputFrame, textvariable=damageMinVar, borderwidth=2, relief="solid"
 )
 damageMax = tk.Label(
-	damageOutput, textvariable=damageMaxVar, borderwidth=2, relief="solid"
+	damageOutputFrame, textvariable=damageMaxVar, borderwidth=2, relief="solid"
 )
 effectHistory = tk.Label(
-	damageOutput, textvariable=effectHistoryVar, width=50, borderwidth=2, relief="solid"
+	damageOutputFrame, textvariable=effectHistoryVar, width=50, borderwidth=2, relief="solid"
 )
 
-# Damage Cards creation
-ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
-ghoulBtn = tk.Button(attackCards, text="Ghoul", image=ghoulBtnImg)
-vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
-vampireBtm = tk.Button(attackCards, text="Vampire", image=vampireBtmImg)
-skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
-skeletalPirateBtn = tk.Button(
-	attackCards, text="Skeletal Pirate", image=skeletalPirateBtnImg
-)
+# Attack Cards creation
+#ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
+#ghoulBtn = tk.Button(attackCardsCanvas, text="Ghoul", image=ghoulBtnImg)
+#vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
+#vampireBtm = tk.Button(attackCardsCanvas, text="Vampire", image=vampireBtmImg)
+#skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
+#skeletalPirateBtn = tk.Button(attackCardsCanvas, text="Skeletal Pirate", image=skeletalPirateBtnImg)
+attackCardBtns = []
 
-# Buffs Creation
+for spell in CardDataBank["DamageSpells"]:
+	buttonImg = tk.PhotoImage(spell["imgFile"])
+	button = tk.Button(attackCardsCanvas, textvariable=spell["name"], image=buttonImg)
+	attackCardBtns.append(button)
+
+
+# BuffsCanvas Creation
 deathTrapBtnImg = tk.PhotoImage(file="Images\Death_Trap.png")
-deathTrapBtn = tk.Button(buffs, background="green", text="25%", image=deathTrapBtnImg)
-feintBtn = tk.Button(buffs, background="green", text="70%")
+deathTrapBtn = tk.Button(buffsCanvas, background="green", text="25%", image=deathTrapBtnImg)
+feintBtnImg = tk.PhotoImage(file="Images\Feint.png")
+feintBtn = tk.Button(buffsCanvas, background="green", text="70%", image=feintBtnImg)
 
 # Debufs Creation
-weakness = tk.Button(debuffs, background="red", text="-25")
+weakness = tk.Button(debuffsCanvas, background="red", text="-25")
 
 # Inc boost and resist Creation
-tempButton = tk.Button(incBoost_Resist, background="grey", text="Tempt")
+tempButton = tk.Button(incBoost_ResistCanvas, background="grey", text="Tempt")
 
 # Armor Stats creation
-deathBoost = tk.LabelFrame(armorStats, text="death boost:")
+deathBoost = tk.LabelFrame(armorStatsFrame, text="death boost:")
 deathBoostIn = tk.Entry(deathBoost, name="death boost: ")
 
 # -------------------------------------------------------------------------------------------------------
 
 # place Containers
-title.grid(row=0, column=0)
-damageOutput.grid(row=1, column=0)
-cardSelection.grid(row=2, column=0)
-attackCards.grid(row=0, column=0, sticky=tk.N)
-attackCards.grid_propagate(0)
-modifications.grid(row=0, column=1)
-buffs.grid(row=0, column=0)
-debuffs.grid(row=1, column=0)
-incBoost_Resist.grid(row=2, column=0)
-armorStats.grid(row=3, column=0)
+titleFrame.grid(row=0, column=0)
+damageOutputFrame.grid(row=1, column=0)
+cardSelectionFrame.grid(row=2, column=0, sticky="N, S, E, W")
+attackCardsCanvas.grid(row=0, column=0, sticky="N, S, E, W")
+attackCardsCanvas.grid_propagate(0)
+modificationsFrame.grid(row=0, column=1, sticky="N, S, E, W")
+buffsCanvas.grid(row=0, column=0, sticky="N, S, E, W")
+debuffsCanvas.grid(row=1, column=0, sticky="N, S, E, W")
+incBoost_ResistCanvas.grid(row=2, column=0, sticky="N, S, E, W")
+armorStatsFrame.grid(row=3, column=0, sticky="N, S, E, W")
 
 # title Placement
 titleLabel.grid()
 
-# DamageOutput Placement
+# DamageOutputFrame Placement
 damageMin.grid(row=0, column=0, sticky="N, S, E, W")
 damageMax.grid(row=0, column=1, sticky="N, S, E, W")
 effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
@@ -112,14 +126,14 @@ effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 rowIndx = 0
 columnIndx = 0
 for Btn in attackCardBtns:
-	Btn.configure(width=120)
+	Btn.configure(width=floor((MAXWINDOWWIDTH/2)/3))
 	Btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
 	columnIndx += 1
 	if columnIndx == 3:
 		rowIndx += 1
 		columnIndx = 0
 
-# Buffs Placement
+# BuffsCanvas Placement
 
 deathTrapBtn.grid()
 feintBtn.grid()
