@@ -1,10 +1,28 @@
 from importlib.metadata import files
 import tkinter as tk
 
-class AttackCard:
-	minAttackVal = 0
-	maxAttackVal = 0
-	imgFile = ""
+class Spell:
+	def __init__(self, cardName, imgFile, school):
+		self.cardName = cardName
+		self.imgFile = imgFile
+		self.school = school
+
+class DamageSpell(Spell):
+	def __init__(self, cardName, imgFile, school, minAttackVal, maxAttackVal):
+		Spell.__init__(self, cardName, imgFile, school)
+		self.minAttackVal = minAttackVal
+		self.maxAttackVal = maxAttackVal
+
+class BuffingSpell(Spell):
+	def __init__(self, cardName, imgFile, school, damageBuff):
+		Spell.__init__(self, cardName, imgFile, school)
+		self.damageBuff = damageBuff
+
+class DebuffingSpell(Spell):
+	def __init__(self, cardName, imgFile, school, damageDebuff):
+		Spell.__init__(self, cardName, imgFile, school)
+		self.damageDebuff = damageDebuff
+
 
 root = tk.Tk()
 
