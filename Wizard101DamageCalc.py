@@ -109,8 +109,6 @@ damageMax.grid(row=0, column=1, sticky="N, S, E, W")
 effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 
 # Damage Cards placement
-attackCardBtns = [ghoulBtn, vampireBtm, skeletalPirateBtn]
-
 rowIndx = 0
 columnIndx = 0
 for Btn in attackCardBtns:
