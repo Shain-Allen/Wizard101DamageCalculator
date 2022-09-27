@@ -1,6 +1,7 @@
 from math import floor
 import tkinter as tk
 import json
+import copy
 
 class Spell:
 	def __init__(self, cardName, imgFile, school):
@@ -68,18 +69,23 @@ effectHistory = tk.Label(
 )
 
 # Attack Cards creation
-#ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
-#ghoulBtn = tk.Button(attackCardsCanvas, text="Ghoul", image=ghoulBtnImg)
-#vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
-#vampireBtm = tk.Button(attackCardsCanvas, text="Vampire", image=vampireBtmImg)
-#skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
-#skeletalPirateBtn = tk.Button(attackCardsCanvas, text="Skeletal Pirate", image=skeletalPirateBtnImg)
 attackCardBtns = []
 
-for spell in CardDataBank["DamageSpells"]:
-	buttonImg = tk.PhotoImage(spell["imgFile"])
-	button = tk.Button(attackCardsCanvas, textvariable=spell["name"], image=buttonImg)
-	attackCardBtns.append(button)
+darkSpirteBtnImg = tk.PhotoImage(file=CardDataBank["DamageSpells"][0]["imgFile"])
+#darkSpirteBtn = 
+attackCardBtns.append(tk.Button(attackCardsCanvas, text=CardDataBank["DamageSpells"][0]["name"], image=darkSpirteBtnImg))
+ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
+ghoulBtn = tk.Button(attackCardsCanvas, text="Ghoul", image=ghoulBtnImg)
+vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
+vampireBtm = tk.Button(attackCardsCanvas, text="Vampire", image=vampireBtmImg)
+skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
+skeletalPirateBtn = tk.Button(attackCardsCanvas, text="Skeletal Pirate", image=skeletalPirateBtnImg)
+
+
+#for spell in CardDataBank["DamageSpells"]:
+#	buttonImg = tk.PhotoImage(spell["imgFile"])
+#	button = tk.Button(attackCardsCanvas, textvariable=spell["name"], image=buttonImg)
+#	attackCardBtns.append(button)
 
 
 # BuffsCanvas Creation
@@ -120,7 +126,7 @@ damageMin.grid(row=0, column=0, sticky="N, S, E, W")
 damageMax.grid(row=0, column=1, sticky="N, S, E, W")
 effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 
-# Damage Cards placement
+# Attack Cards placement
 rowIndx = 0
 columnIndx = 0
 for Btn in attackCardBtns:
