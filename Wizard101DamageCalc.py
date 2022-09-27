@@ -2,8 +2,6 @@ from math import floor
 import tkinter as tk
 import json
 
-from numpy import imag
-
 class Spell:
 	def __init__(self, cardName, imgFile, school):
 		self.cardName = cardName
