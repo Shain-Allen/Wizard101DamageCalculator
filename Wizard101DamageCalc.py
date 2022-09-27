@@ -71,21 +71,23 @@ effectHistory = tk.Label(
 # Attack Cards creation
 attackCardBtns = []
 
-darkSpirteBtnImg = tk.PhotoImage(file=CardDataBank["DamageSpells"][0]["imgFile"])
-#darkSpirteBtn = 
-attackCardBtns.append(tk.Button(attackCardsCanvas, text=CardDataBank["DamageSpells"][0]["name"], image=darkSpirteBtnImg))
-ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
-ghoulBtn = tk.Button(attackCardsCanvas, text="Ghoul", image=ghoulBtnImg)
-vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
-vampireBtm = tk.Button(attackCardsCanvas, text="Vampire", image=vampireBtmImg)
-skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
-skeletalPirateBtn = tk.Button(attackCardsCanvas, text="Skeletal Pirate", image=skeletalPirateBtnImg)
+#darkSpirteBtnImg = tk.PhotoImage(file=CardDataBank["DamageSpells"][0]["imgFile"])
+#attackCardBtns.append(tk.Button(attackCardsCanvas, text=CardDataBank["DamageSpells"][0]["name"], image=darkSpirteBtnImg))
+#ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
+#ghoulBtn = tk.Button(attackCardsCanvas, text="Ghoul", image=ghoulBtnImg)
+#vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
+#vampireBtm = tk.Button(attackCardsCanvas, text="Vampire", image=vampireBtmImg)
+#skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
+#skeletalPirateBtn = tk.Button(attackCardsCanvas, text="Skeletal Pirate", image=skeletalPirateBtnImg)
 
+CardDataBank = json.load(open("Cards.json"))
 
-#for spell in CardDataBank["DamageSpells"]:
-#	buttonImg = tk.PhotoImage(spell["imgFile"])
-#	button = tk.Button(attackCardsCanvas, textvariable=spell["name"], image=buttonImg)
-#	attackCardBtns.append(button)
+for spell in CardDataBank["DamageSpells"]:
+	buttonImg = tk.PhotoImage(spell["imgFile"])
+	button = tk.Button(attackCardsCanvas, textvariable=spell["name"], image=buttonImg)
+	print("buttonimg ID: " + str(id(buttonImg)))
+	print("button ID: " + str(id(button)))
+	attackCardBtns.append(button)
 
 
 # BuffsCanvas Creation
