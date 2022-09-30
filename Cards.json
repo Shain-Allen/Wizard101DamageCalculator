@@ -2,44 +2,44 @@
 	"DamageSpells": [
 		{
 			"name": "Dark Sprite",
-			"imgFile": "Images\\Dark_Sprite.png",
+			"imgFile": "Images/Dark_Sprite.png",
 			"school": "Death",
 			"MaxDmg": "",
 			"MinDmg": ""
 		},
 		{
 			"name": "Ghoul",
-			"imgFile": "Images\\Ghoul.png",
+			"imgFile": "Images/Ghoul.png",
 			"school": "Death"
 		},
 		{
 			"name": "Vampire",
-			"imgFile": "Images\\Vampire.png",
+			"imgFile": "Images/Vampire.png",
 			"school": "Death"
 		},
 		{
 			"name": "Skeletal_Pirate",
-			"imgFile": "Images\\Skeletal_Pirate.png",
+			"imgFile": "Images/Skeletal_Pirate.png",
 			"school": "Death"
 		}
 	],
 	"BuffingSpells": [
 		{
 			"name": "Death Blade",
-			"imgFile": "Images\\Death_Blade.png",
+			"imgFile": "Images/Death_Blade.png",
 			"school": "Death",
 			"buff": "35"
 		},
 		{
 			"name": "Death Trap",
-			"imgFile": "Images\\Death_Trap.png",
+			"imgFile": "Images/Death_Trap.png",
 			"school": "Death"
 		}
 	],
 	"DebuffingSpells": [
 		{
 			"name": "Death Sheild",
-			"imgFile": "Images\\Death_Shield.png",
+			"imgFile": "Images/Death_Shield.png",
 			"school": "Death"
 		}
 	]
