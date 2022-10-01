@@ -1,3 +1,4 @@
+import enum
 from math import floor
 import tkinter as tk
 import json
@@ -69,23 +70,23 @@ effectHistory = tk.Label(
 )
 
 # Attack Cards creation
+attackCardBtnImgs = []
 attackCardBtns = []
 
-darkSpirteBtnImg = tk.PhotoImage(file=CardDataBank["DamageSpells"][0]["imgFile"])
-attackCardBtns.append(tk.Button(attackCardsCanvas, text=CardDataBank["DamageSpells"][0]["name"], image=darkSpirteBtnImg))
-ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
-attackCardBtns.append(tk.Button(attackCardsCanvas, text="Ghoul", image=ghoulBtnImg))
-vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
-attackCardBtns.append(tk.Button(attackCardsCanvas, text="Vampire", image=vampireBtmImg))
-skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
-attackCardBtns.append(tk.Button(attackCardsCanvas, text="Skeletal Pirate", image=skeletalPirateBtnImg))
+# darkSpirteBtnImg = tk.PhotoImage(file=CardDataBank["DamageSpells"][0]["imgFile"])
+# attackCardBtns.append(tk.Button(attackCardsCanvas, text=CardDataBank["DamageSpells"][0]["name"], image=darkSpirteBtnImg))
+# ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
+# attackCardBtns.append(tk.Button(attackCardsCanvas, text="Ghoul", image=ghoulBtnImg))
+# vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
+# attackCardBtns.append(tk.Button(attackCardsCanvas, text="Vampire", image=vampireBtmImg))
+# skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
+# attackCardBtns.append(tk.Button(attackCardsCanvas, text="Skeletal Pirate", image=skeletalPirateBtnImg))
 
-# for spell in CardDataBank["DamageSpells"]:
-# 	buttonImg = tk.PhotoImage(spell["imgFile"])
-# 	button = tk.Button(attackCardsCanvas, textvariable=spell["name"], image=buttonImg)
-# 	print("buttonimg ID: " + str(id(buttonImg)))
-# 	print("button ID: " + str(id(button)))
-# 	attackCardBtns.append(button)
+for spell in CardDataBank["DamageSpells"]:
+	newImg = tk.PhotoImage(spell["imgFile"])
+	attackCardBtnImgs.append(newImg)
+	newButton = tk.Button(attackCardsCanvas, textvariable=spell["name"])
+	attackCardBtns.append(newButton)
 
 
 # BuffsCanvas Creation
@@ -129,8 +130,8 @@ effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 # Attack Cards placement
 rowIndx = 0
 columnIndx = 0
-for Btn in attackCardBtns:
-	Btn.configure(width=floor((MAXWINDOWWIDTH/2)/3))
+for i, Btn in enumerate(attackCardBtns):
+	Btn.configure(width=floor((MAXWINDOWWIDTH/2)/3), image=attackCardBtnImgs[i])
 	Btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
 	columnIndx += 1
 	if columnIndx == 3:
