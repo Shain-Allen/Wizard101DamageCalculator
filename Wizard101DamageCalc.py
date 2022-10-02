@@ -1,8 +1,7 @@
-import enum
 from math import floor
 import tkinter as tk
 import json
-import copy
+
 
 class Spell:
 	def __init__(self, cardName, imgFile, school):
@@ -73,19 +72,10 @@ effectHistory = tk.Label(
 attackCardBtnImgs = []
 attackCardBtns = []
 
-# darkSpirteBtnImg = tk.PhotoImage(file=CardDataBank["DamageSpells"][0]["imgFile"])
-# attackCardBtns.append(tk.Button(attackCardsCanvas, text=CardDataBank["DamageSpells"][0]["name"], image=darkSpirteBtnImg))
-# ghoulBtnImg = tk.PhotoImage(file="Images\Ghoul.png")
-# attackCardBtns.append(tk.Button(attackCardsCanvas, text="Ghoul", image=ghoulBtnImg))
-# vampireBtmImg = tk.PhotoImage(file="Images\Vampire.png")
-# attackCardBtns.append(tk.Button(attackCardsCanvas, text="Vampire", image=vampireBtmImg))
-# skeletalPirateBtnImg = tk.PhotoImage(file="Images\Skeletal_Pirate.png")
-# attackCardBtns.append(tk.Button(attackCardsCanvas, text="Skeletal Pirate", image=skeletalPirateBtnImg))
-
 for spell in CardDataBank["DamageSpells"]:
 	newImg = tk.PhotoImage(spell["imgFile"])
 	attackCardBtnImgs.append(newImg)
-	newButton = tk.Button(attackCardsCanvas, textvariable=spell["name"])
+	newButton = tk.Button(attackCardsCanvas, text=spell["name"])
 	attackCardBtns.append(newButton)
 
 
