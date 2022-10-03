@@ -1,5 +1,6 @@
 from math import floor
 import tkinter as tk
+from PIL import Image, ImageTk
 import json
 
 
@@ -73,7 +74,7 @@ attackCardBtnImgs = []
 attackCardBtns = []
 
 for spell in CardDataBank["DamageSpells"]:
-	newImg = tk.PhotoImage(spell["imgFile"])
+	newImg = ImageTk.PhotoImage(Image.open(spell["imgFile"]))
 	attackCardBtnImgs.append(newImg)
 	newButton = tk.Button(attackCardsCanvas, text=spell["name"])
 	attackCardBtns.append(newButton)
