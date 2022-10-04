@@ -1,13 +1,16 @@
+from distutils.command.config import config
 from math import floor
 import tkinter as tk
 from PIL import Image, ImageTk
 import json
 
+from click import command
+
 
 class Spell:
 	def __init__(self, cardName, imgFile, school):
 		self.cardName = cardName
-		self.imgFile = imgFile
+		self.img = ImageTk.PhotoImage(Image.open(imgFile))
 		self.school = school
 
 class DamageSpell(Spell):
@@ -39,7 +42,9 @@ root.configure(height=MAXWINDOWHEIGHT, width=MAXWINDOWWIDTH)
 titleFrame = tk.Frame(root, borderwidth=1, relief="solid", height=80, width=MAXWINDOWWIDTH)
 damageOutputFrame = tk.Frame(root, width=MAXWINDOWWIDTH)
 cardSelectionFrame = tk.Frame(root, height=1000, width=MAXWINDOWWIDTH)
-attackCardsCanvas = tk.Canvas(cardSelectionFrame,width=MAXWINDOWWIDTH/2 , borderwidth=2, relief="solid")
+attackCardsCanvasOuter = tk.Canvas(cardSelectionFrame,width=MAXWINDOWWIDTH/2, borderwidth=2, relief="solid")
+attackCardsCanvasInner = tk.Canvas(attackCardsCanvasOuter)
+attackCardsFrame = tk.Frame(attackCardsCanvasInner)
 modificationsFrame = tk.Frame(cardSelectionFrame)
 buffsCanvas = tk.Canvas(modificationsFrame, borderwidth=2, relief="solid")
 debuffsCanvas = tk.Canvas(modificationsFrame, borderwidth=2, relief="solid")
@@ -70,20 +75,20 @@ effectHistory = tk.Label(
 )
 
 # Attack Cards creation
-attackCardBtnImgs = []
+damageSpells = []
 attackCardBtns = []
 
 for spell in CardDataBank["DamageSpells"]:
-	newImg = ImageTk.PhotoImage(Image.open(spell["imgFile"]))
-	attackCardBtnImgs.append(newImg)
-	newButton = tk.Button(attackCardsCanvas, text=spell["name"])
+	newDamageSpell = DamageSpell(spell["name"], spell["imgFile"], spell["school"], spell["minDmg"], spell["maxDmg"])
+	damageSpells.append(newDamageSpell)
+	newButton = tk.Button(attackCardsFrame, text=spell["name"])
 	attackCardBtns.append(newButton)
 
 
 # BuffsCanvas Creation
-deathTrapBtnImg = tk.PhotoImage(file="Images\Death_Trap.png")
+deathTrapBtnImg = tk.PhotoImage(file="Images/DeathSchool/BuffingSpells/Death_Trap.png")
 deathTrapBtn = tk.Button(buffsCanvas, background="green", text="25%", image=deathTrapBtnImg)
-feintBtnImg = tk.PhotoImage(file="Images\Feint.png")
+feintBtnImg = tk.PhotoImage(file="Images/DeathSchool/BuffingSpells/Feint.png")
 feintBtn = tk.Button(buffsCanvas, background="green", text="70%", image=feintBtnImg)
 
 # Debufs Creation
@@ -97,18 +102,29 @@ deathBoost = tk.LabelFrame(armorStatsFrame, text="death boost:")
 deathBoostIn = tk.Entry(deathBoost, name="death boost: ")
 
 # -------------------------------------------------------------------------------------------------------
-
 # place Containers
 titleFrame.grid(row=0, column=0)
 damageOutputFrame.grid(row=1, column=0)
 cardSelectionFrame.grid(row=2, column=0, sticky="N, S, E, W")
-attackCardsCanvas.grid(row=0, column=0, sticky="N, S, E, W")
-attackCardsCanvas.grid_propagate(0)
+
+attackCardsCanvasOuter.grid(row=0, column=0, sticky="N, S, E, W")
+attackCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand="yes")
+
+scroll_y = tk.Scrollbar(attackCardsCanvasOuter, orient="vertical", command=attackCardsCanvasInner.yview)
+scroll_y.pack(side=tk.LEFT, fill="y")
+
+attackCardsCanvasInner.configure(yscrollcommand=scroll_y.set)
+
+attackCardsCanvasInner.bind("<Configure>", lambda e: attackCardsCanvasInner.configure(attackCardsCanvasInner.bbox("all")))
+
+attackCardsCanvasInner.create_window((0,0), window=attackCardsFrame, anchor="nw")
+
 modificationsFrame.grid(row=0, column=1, sticky="N, S, E, W")
 buffsCanvas.grid(row=0, column=0, sticky="N, S, E, W")
 debuffsCanvas.grid(row=1, column=0, sticky="N, S, E, W")
 incBoost_ResistCanvas.grid(row=2, column=0, sticky="N, S, E, W")
 armorStatsFrame.grid(row=3, column=0, sticky="N, S, E, W")
+
 
 # title Placement
 titleLabel.grid()
@@ -122,7 +138,7 @@ effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 rowIndx = 0
 columnIndx = 0
 for i, Btn in enumerate(attackCardBtns):
-	Btn.configure(width=floor((MAXWINDOWWIDTH/2)/3), image=attackCardBtnImgs[i])
+	Btn.configure(width=floor(attackCardsFrame.winfo_width()/3), image=damageSpells[i].img)
 	Btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
 	columnIndx += 1
 	if columnIndx == 3:
