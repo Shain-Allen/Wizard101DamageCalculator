@@ -20,7 +20,7 @@ class Spell:
 
 		hsize = int(float(baseimage.height) * float(wpercent))
 
-		self.img = ImageTk.PhotoImage(baseimage.resize((newCardWidth, hsize), Image.ANTIALIAS))
+		self.img = ImageTk.PhotoImage(baseimage.resize((newCardWidth, hsize), Image.LANCZOS))
 
 
 class DamageSpell(Spell):
@@ -49,7 +49,7 @@ MAXWINDOWHEIGHT = 1280
 root.configure(height=MAXWINDOWHEIGHT, width=MAXWINDOWWIDTH)
 
 # create Containers
-titleFrame = tk.Frame(root, borderwidth=1, relief="solid", height=80, width=MAXWINDOWWIDTH)
+titleFrame = tk.Frame(root, borderwidth=1, relief="solid", width=MAXWINDOWWIDTH)
 damageOutputFrame = tk.Frame(root, width=MAXWINDOWWIDTH)
 cardSelectionFrame = tk.Frame(root, height=1000, width=MAXWINDOWWIDTH)
 attackCardsFrameOuter = tk.Frame(cardSelectionFrame,width=MAXWINDOWWIDTH/2, borderwidth=2, relief="solid")
@@ -62,7 +62,7 @@ incBoost_ResistFrame = tk.Frame(modificationsFrame, height=200, width=MAXWINDOWW
 armorStatsFrame = tk.Frame(modificationsFrame,  height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief="solid")
 
 # Title creation
-# titleLabel = tk.Label(titleFrame, text="Wizard 101 Damage Calculator", justify=tk.CENTER)
+titleLabel = tk.Label(titleFrame, text="Wizard 101 Damage Calculator", justify=tk.CENTER)
 
 # DamageOutputFrame
 damageMinVar = tk.StringVar(damageOutputFrame)
@@ -152,9 +152,8 @@ effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 rowIndx = 0
 columnIndx = 0
 for i, Btn in enumerate(attackCardBtns):
-	#print(attackCardsFrame.winfo_width())
-	damageSpells[i].imgFileResize(floor(attackCardsFrame.winfo_width()/3))
-	Btn.configure(width=floor(attackCardsFrame.winfo_width()/3), image=damageSpells[i].img)
+	damageSpells[i].imgFileResize(122)
+	Btn.configure(image=damageSpells[i].img)
 	Btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
 	columnIndx += 1
 	if columnIndx == 3:
