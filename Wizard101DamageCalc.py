@@ -74,15 +74,9 @@ damageMaxVar.set("0")
 effectHistoryVar = tk.StringVar(damageOutputFrame)
 effectHistoryVar.set("")
 
-damageMin = tk.Label(
-	damageOutputFrame, textvariable=damageMinVar, borderwidth=2, relief="solid"
-)
-damageMax = tk.Label(
-	damageOutputFrame, textvariable=damageMaxVar, borderwidth=2, relief="solid"
-)
-effectHistory = tk.Label(
-	damageOutputFrame, textvariable=effectHistoryVar, width=50, borderwidth=2, relief="solid"
-)
+damageMin = tk.Label(damageOutputFrame, textvariable=damageMinVar, borderwidth=2, relief="solid")
+damageMax = tk.Label(damageOutputFrame, textvariable=damageMaxVar, borderwidth=2, relief="solid")
+effectHistory = tk.Label(damageOutputFrame, textvariable=effectHistoryVar, width=50, borderwidth=2, relief="solid")
 
 # Attack Cards creation
 damageSpells = []
@@ -96,17 +90,13 @@ for spell in CardDataBank["DamageSpells"]:
 
 
 # BuffsFrameOuter Creation
-# deathTrapBtnImg = tk.PhotoImage(file="Images/DeathSchool/BuffingSpells/Death_Trap.png")
-# deathTrapBtn = tk.Button(buffsFrameOuter, text="25%", image=deathTrapBtnImg)
-# feintBtnImg = tk.PhotoImage(file="Images/DeathSchool/BuffingSpells/Feint.png")
-# feintBtn = tk.Button(buffsFrameOuter, text="70%", image=feintBtnImg)
+
 
 # Debufs Creation
-# deathSheildBtnImg = ImageTk.PhotoImage(Image.open("Images\DeathSchool\DebuffingSpells\Death_Shield.png"))
-# deathShieldBtn = tk.Button(debuffsFrameOuter, text="", image=deathSheildBtnImg)
+
 
 # Inc boost and resist Creation
-#tempButton = tk.Button(incBoost_ResistFrame, background="grey", text="Tempt")
+
 
 # Armor Stats creation
 # deathBoost = tk.LabelFrame(armorStatsFrame, text="death boost:")
@@ -141,18 +131,21 @@ armorStatsFrame.grid(row=3, column=0, sticky="N, S, E, W")
 armorStatsFrame.propagate(0)
 
 # title Placement
-#titleLabel.grid()
+titleLabel.grid()
 
 # DamageOutputFrame Placement
 damageMin.grid(row=0, column=0, sticky="N, S, E, W")
 damageMax.grid(row=0, column=1, sticky="N, S, E, W")
 effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 
+root.update_idletasks()
+cardWidth = floor((attackCardsCanvasInner.winfo_reqwidth() - scroll_y.winfo_reqwidth())/3)
+
 # Attack Cards placement
 rowIndx = 0
 columnIndx = 0
 for i, Btn in enumerate(attackCardBtns):
-	damageSpells[i].imgFileResize(122)
+	damageSpells[i].imgFileResize(cardWidth)
 	Btn.configure(image=damageSpells[i].img)
 	Btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
 	columnIndx += 1
@@ -161,14 +154,13 @@ for i, Btn in enumerate(attackCardBtns):
 		columnIndx = 0
 
 # BuffsFrameOuter Placement
-# deathTrapBtn.grid()
-# feintBtn.grid()
+
 
 # Debufs Placement
-# deathShieldBtn.grid()
+
 
 # Inc boost and resist Placement
-#tempButton.grid()
+
 
 # Armor Stats placement
 #deathBoostIn.grid()
