@@ -69,6 +69,24 @@
 			"imgFile": "Images/DeathSchool/BuffingSpells/Death_Trap.png",
 			"school": "Death",
 			"buff": "35"
+		},
+		{
+			"name": "Feint",
+			"imgFile": "Images/DeathSchool/BuffingSpells/Feint.png",
+			"school": "Death",
+			"buff": "70"
+		},
+		{
+			"name": "Dark Pact",
+			"imgFile": "Images/DeathSchool/BuffingSpells/Dark_Pact.png",
+			"school": "Death",
+			"buff": "25"
+		},
+		{
+			"name": "Dead zone",
+			"imgFile": "Images/DeathSchool/BuffingSpells/Deadzone.png",
+			"school": "Death",
+			"buff": "25"
 		}
 	],
 	"DebuffingSpells": [

@@ -13,15 +13,15 @@ class Spell:
 		self.cardName = cardName
 		self.school = school
 
-	def imgFileResize(self, newCardWidth):
+	def imgFileResize(self, newdamageSpellCardWidth):
 
 		baseimage = Image.open(self.imgFile)
 
-		wpercent = (newCardWidth / float(baseimage.width))
+		wpercent = (newdamageSpellCardWidth / float(baseimage.width))
 
 		hsize = int(float(baseimage.height) * float(wpercent))
 
-		self.img = ImageTk.PhotoImage(baseimage.resize((newCardWidth, hsize), Image.LANCZOS))
+		self.img = ImageTk.PhotoImage(baseimage.resize((newdamageSpellCardWidth, hsize), Image.LANCZOS))
 
 		self.btn.config(image=self.img)
 
@@ -34,7 +34,7 @@ class DamageSpell(Spell):
 
 class BuffingSpell(Spell):
 	def __init__(self, parantWiget, imgFile, cardName, school, damageBuff):
-		Spell.__init__(self, imgFile, cardName, school)
+		Spell.__init__(self, parantWiget, imgFile, cardName, school)
 		self.damageBuff = damageBuff
 
 class DebuffingSpell(Spell):
@@ -52,17 +52,30 @@ MAXWINDOWHEIGHT = 1280
 root.configure(height=MAXWINDOWHEIGHT, width=MAXWINDOWWIDTH)
 
 # create Containers
-titleFrame = tk.Frame(root, borderwidth=1, relief="solid", width=MAXWINDOWWIDTH)
+titleFrame = tk.Frame(root, width=MAXWINDOWWIDTH, borderwidth=1, relief=tk.SOLID)
 damageOutputFrame = tk.Frame(root, width=MAXWINDOWWIDTH)
 cardSelectionFrame = tk.Frame(root, height=1000, width=MAXWINDOWWIDTH)
-attackCardsFrameOuter = tk.Frame(cardSelectionFrame,width=MAXWINDOWWIDTH/2, borderwidth=2, relief="solid")
+
+attackCardsFrameOuter = tk.Frame(cardSelectionFrame,width=MAXWINDOWWIDTH/2, borderwidth=2, relief=tk.SOLID)
 attackCardsCanvasInner = tk.Canvas(attackCardsFrameOuter)
 attackCardsFrame = tk.Frame(attackCardsCanvasInner)
+attackCardsScroll_y = tk.Scrollbar(attackCardsFrameOuter, orient=tk.VERTICAL, command=attackCardsCanvasInner.yview)
+
 modificationsFrame = tk.Frame(cardSelectionFrame)
-buffsFrameOuter = tk.Frame(modificationsFrame, height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief="solid")
-debuffsFrameOuter = tk.Frame(modificationsFrame, height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief="solid")
-incBoost_ResistFrame = tk.Frame(modificationsFrame, height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief="solid")
-armorStatsFrame = tk.Frame(modificationsFrame,  height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief="solid")
+
+buffCardsFrameOuter = tk.Frame(modificationsFrame, height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief=tk.SOLID)
+buffCardsCanvasInner = tk.Canvas(buffCardsFrameOuter)
+buffCardsFrame = tk.Frame(buffCardsCanvasInner)
+buffCardsScroll_y = tk.Scrollbar(buffCardsFrameOuter, orient=tk.VERTICAL, command=buffCardsCanvasInner.yview)
+
+debuffCardsFrameOuter = tk.Frame(modificationsFrame, height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief=tk.SOLID)
+debuffCardsCanvasInner = tk.Canvas(debuffCardsFrameOuter)
+debuffCardsFrame = tk.Frame(debuffCardsCanvasInner)
+debuffCardsScroll_y = tk.Scrollbar(debuffCardsFrameOuter, orient=tk.VERTICAL, command=debuffCardsCanvasInner.yview)
+
+
+incBoost_ResistFrameOuter = tk.Frame(modificationsFrame, height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief=tk.SOLID)
+armorStatsFrameOuter = tk.Frame(modificationsFrame,  height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief=tk.SOLID)
 
 # Title creation
 titleLabel = tk.Label(titleFrame, text="Wizard 101 Damage Calculator", justify=tk.CENTER)
@@ -90,12 +103,18 @@ for spell in CardDataBank["DamageSpells"]:
 
 
 # BuffsFrameOuter Creation
-# BuffSpells = []
+buffSpells = []
 
-# for spell in CardDataBank["BuffingSpells"]:
-# 	newBuffSpell = BuffingSpell()
+for spell in CardDataBank["BuffingSpells"]:
+	newBuffSpell = BuffingSpell(buffCardsFrame, spell["imgFile"], spell["name"], spell["school"], spell["buff"])
+	buffSpells.append(newBuffSpell)
 
 # Debufs Creation
+debuffSpells = []
+
+for spell in CardDataBank["DebuffingSpells"]:
+	newDebuffSpell = DebuffingSpell(debuffCardsFrame, spell["imgFile"], spell["name"], spell["school"], spell["debuff"])
+	debuffSpells.append(newDebuffSpell)
 
 
 # Inc boost and resist Creation
@@ -111,27 +130,39 @@ titleFrame.grid(row=0, column=0)
 damageOutputFrame.grid(row=1, column=0)
 cardSelectionFrame.grid(row=2, column=0, sticky="N, S, E, W")
 
+#attack card containers + scroll bar configuration
 attackCardsFrameOuter.grid(row=0, column=0, sticky="N, S, E, W")
 attackCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand="yes")
-
-scroll_y = tk.Scrollbar(attackCardsFrameOuter, orient="vertical", command=attackCardsCanvasInner.yview)
-scroll_y.pack(side=tk.LEFT, fill="y")
-
-attackCardsCanvasInner['yscrollcommand'] = scroll_y.set
-
-attackCardsCanvasInner.bind("<Configure>", lambda e: attackCardsCanvasInner.configure(attackCardsCanvasInner.bbox("all")))
-
+attackCardsScroll_y.pack(side=tk.LEFT, fill="y")
+attackCardsCanvasInner['yscrollcommand'] = attackCardsScroll_y.set
+attackCardsCanvasInner.bind("<Configure>", lambda e: attackCardsCanvasInner.configure(scrollregion=attackCardsCanvasInner.bbox("all")))
 attackCardsCanvasInner.create_window((0,0), window=attackCardsFrame, anchor="nw")
 
+#modifications side configuration
 modificationsFrame.grid(row=0, column=1, sticky="N, S, E, W")
-buffsFrameOuter.grid(row=0, column=0, sticky="N, S, E, W")
-buffsFrameOuter.propagate(0)
-debuffsFrameOuter.grid(row=1, column=0, sticky="N, S, E, W")
-debuffsFrameOuter.propagate(0)
-incBoost_ResistFrame.grid(row=2, column=0, sticky="N, S, E, W")
-incBoost_ResistFrame.propagate(0)
-armorStatsFrame.grid(row=3, column=0, sticky="N, S, E, W")
-armorStatsFrame.propagate(0)
+
+#buff Card containers + scroll bar configuration
+buffCardsFrameOuter.grid(row=0, column=0, sticky="N, S, E, W")
+buffCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand="yes")
+buffCardsScroll_y.pack(side=tk.LEFT, fill="y")
+buffCardsCanvasInner['yscrollcommand'] = buffCardsScroll_y.set
+buffCardsCanvasInner.bind("<Configure>", lambda e: buffCardsCanvasInner.configure(scrollregion=buffCardsCanvasInner.bbox("all")))
+buffCardsCanvasInner.create_window((0,0), window=buffCardsFrame, anchor="nw")
+
+#debuff Card Containers + scroll bar configuration
+debuffCardsFrameOuter.grid(row=1, column=0, sticky="N, S, E, W")
+debuffCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand="yes")
+debuffCardsScroll_y.pack(side=tk.LEFT, fill="y")
+debuffCardsCanvasInner['yscrollcommand'] = debuffCardsScroll_y.set
+debuffCardsCanvasInner.bind("<Configure>", lambda e: debuffCardsCanvasInner.configure(scrollregion=debuffCardsCanvasInner.bbox("all")))
+debuffCardsCanvasInner.create_window((0,0), window=debuffCardsFrame, anchor="nw")
+
+#Natural monster boosts/resist container configuration
+incBoost_ResistFrameOuter.grid(row=2, column=0, sticky="N, S, E, W")
+
+#Player armor stat entry configuration
+armorStatsFrameOuter.grid(row=3, column=0, sticky="N, S, E, W")
+
 
 # title Placement
 titleLabel.grid()
@@ -142,13 +173,15 @@ damageMax.grid(row=0, column=1, sticky="N, S, E, W")
 effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 
 root.update_idletasks()
-cardWidth = floor((attackCardsCanvasInner.winfo_reqwidth() - scroll_y.winfo_reqwidth())/3)
+damageSpellCardWidth = floor((attackCardsCanvasInner.winfo_reqwidth() - attackCardsScroll_y.winfo_reqwidth())/3)
+buffSpellCardWidth = floor((buffCardsCanvasInner.winfo_reqwidth() - buffCardsScroll_y.winfo_reqwidth())/4)
+debuffSpellCardWidth = floor((debuffCardsCanvasInner.winfo_reqwidth() - debuffCardsScroll_y.winfo_reqwidth())/4)
 
 # Attack Cards placement
 rowIndx = 0
 columnIndx = 0
 for spell in damageSpells:
-	spell.imgFileResize(cardWidth)
+	spell.imgFileResize(damageSpellCardWidth)
 	spell.btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
 	columnIndx += 1
 	if columnIndx == 3:
@@ -156,10 +189,26 @@ for spell in damageSpells:
 		columnIndx = 0
 
 # BuffsFrameOuter Placement
-
+rowIndx = 0
+columnIndx = 0
+for spell in buffSpells:
+	spell.imgFileResize(buffSpellCardWidth)
+	spell.btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
+	columnIndx += 1
+	if columnIndx == 4:
+		rowIndx += 1
+		columnIndx = 0
 
 # Debufs Placement
-
+rowIndx = 0
+columnIndx = 0
+for spell in debuffSpells:
+	spell.imgFileResize(debuffSpellCardWidth)
+	spell.btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
+	columnIndx += 1
+	if columnIndx == 4:
+		rowIndx += 1
+		columnIndx = 0
 
 # Inc boost and resist Placement
 
