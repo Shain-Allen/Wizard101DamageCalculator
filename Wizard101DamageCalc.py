@@ -1,8 +1,10 @@
 from math import floor
 import tkinter as tk
 from turtle import width
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageOps
 import json
+
+from numpy import append
 
 
 class Spell:
@@ -24,6 +26,24 @@ class Spell:
 		self.img = ImageTk.PhotoImage(baseimage.resize((newdamageSpellCardWidth, hsize), Image.LANCZOS))
 
 		self.btn.config(image=self.img)
+	
+	def DefineBtnCommand(self, spellArray):
+		self.btn.config(command=lambda: self.BtnToggle(spellArray))
+
+	def BtnToggle(self, spellArray):
+		baseimage = Image.open(self.imgFile)
+		imgHeight = self.img.height()
+		imgWidth = self.img.width()
+
+		if(self not in spellArray):
+			spellArray.append(self)
+			baseimage = ImageOps.grayscale(baseimage)
+			self.img = ImageTk.PhotoImage(baseimage.resize((imgWidth, imgHeight), Image.LANCZOS))
+		else:
+			spellArray.remove(self)
+			self.img = ImageTk.PhotoImage(baseimage.resize((imgWidth, imgHeight), Image.LANCZOS))
+
+		self.btn.config(image=self.img)
 
 
 class DamageSpell(Spell):
@@ -31,6 +51,35 @@ class DamageSpell(Spell):
 		Spell.__init__(self, parantWiget, imgFile, cardName, school)
 		self.minAttackVal = minAttackVal
 		self.maxAttackVal = maxAttackVal
+
+	def BtnToggle(self, spellArray):
+		baseimage = Image.open(self.imgFile)
+		imgHeight = self.img.height()
+		imgWidth = self.img.width()
+
+		if(self not in spellArray):
+			
+			for damageSpell in spellArray:
+				if(type(damageSpell) == DamageSpell):
+					spellArray.remove(damageSpell)
+					damageSpell.Colorize()
+
+			spellArray.append(self)
+			baseimage = ImageOps.grayscale(baseimage)
+			self.img = ImageTk.PhotoImage(baseimage.resize((imgWidth, imgHeight), Image.LANCZOS))
+		else:
+			spellArray.remove(self)
+			self.img = ImageTk.PhotoImage(baseimage.resize((imgWidth, imgHeight), Image.LANCZOS))
+
+		self.btn.config(image=self.img)
+
+	def Colorize(self):
+		baseimage = Image.open(self.imgFile)
+		imgHeight = self.img.height()
+		imgWidth = self.img.width()
+
+		self.img = ImageTk.PhotoImage(baseimage.resize((imgWidth, imgHeight), Image.LANCZOS))
+		self.btn.config(image=self.img)
 
 class BuffingSpell(Spell):
 	def __init__(self, parantWiget, imgFile, cardName, school, damageBuff):
@@ -43,6 +92,8 @@ class DebuffingSpell(Spell):
 		self.damageDebuff = damageDebuff
 
 CardDataBank = json.load(open("Cards.json"))
+
+spellHistory = []
 
 root = tk.Tk()
 
@@ -97,6 +148,7 @@ damageSpells = []
 
 for spell in CardDataBank["DamageSpells"]:
 	newDamageSpell = DamageSpell(attackCardsFrame, spell["imgFile"], spell["name"], spell["school"], spell["minDmg"], spell["maxDmg"])
+	newDamageSpell.DefineBtnCommand(spellHistory)
 	damageSpells.append(newDamageSpell)
 
 
@@ -105,6 +157,7 @@ buffSpells = []
 
 for spell in CardDataBank["BuffingSpells"]:
 	newBuffSpell = BuffingSpell(buffCardsFrame, spell["imgFile"], spell["name"], spell["school"], spell["buff"])
+	newBuffSpell.DefineBtnCommand(spellHistory)
 	buffSpells.append(newBuffSpell)
 
 # Debufs Creation
@@ -112,6 +165,7 @@ debuffSpells = []
 
 for spell in CardDataBank["DebuffingSpells"]:
 	newDebuffSpell = DebuffingSpell(debuffCardsFrame, spell["imgFile"], spell["name"], spell["school"], spell["debuff"])
+	newDebuffSpell.DefineBtnCommand(spellHistory)
 	debuffSpells.append(newDebuffSpell)
 
 
