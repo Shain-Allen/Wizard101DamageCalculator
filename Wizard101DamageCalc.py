@@ -46,13 +46,14 @@ CardDataBank = json.load(open("Cards.json"))
 
 root = tk.Tk()
 
+root.title("Wizard 101 Calculator")
+
 MAXWINDOWWIDTH = 720
 MAXWINDOWHEIGHT = 1280
 
 root.configure(height=MAXWINDOWHEIGHT, width=MAXWINDOWWIDTH)
 
 # create Containers
-titleFrame = tk.Frame(root, width=MAXWINDOWWIDTH, borderwidth=1, relief=tk.SOLID)
 damageOutputFrame = tk.Frame(root, width=MAXWINDOWWIDTH)
 cardSelectionFrame = tk.Frame(root, height=1000, width=MAXWINDOWWIDTH)
 
@@ -76,9 +77,6 @@ debuffCardsScroll_y = tk.Scrollbar(debuffCardsFrameOuter, orient=tk.VERTICAL, co
 
 incBoost_ResistFrameOuter = tk.Frame(modificationsFrame, height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief=tk.SOLID)
 armorStatsFrameOuter = tk.Frame(modificationsFrame,  height=200, width=MAXWINDOWWIDTH/2, borderwidth=2, relief=tk.SOLID)
-
-# Title creation
-titleLabel = tk.Label(titleFrame, text="Wizard 101 Damage Calculator", justify=tk.CENTER)
 
 # DamageOutputFrame
 damageMinVar = tk.StringVar(damageOutputFrame)
@@ -126,7 +124,6 @@ for spell in CardDataBank["DebuffingSpells"]:
 
 # -------------------------------------------------------------------------------------------------------
 # place Containers
-titleFrame.grid(row=0, column=0)
 damageOutputFrame.grid(row=1, column=0)
 cardSelectionFrame.grid(row=2, column=0, sticky="N, S, E, W")
 
@@ -163,14 +160,12 @@ incBoost_ResistFrameOuter.grid(row=2, column=0, sticky="N, S, E, W")
 #Player armor stat entry configuration
 armorStatsFrameOuter.grid(row=3, column=0, sticky="N, S, E, W")
 
-
-# title Placement
-titleLabel.grid()
-
 # DamageOutputFrame Placement
 damageMin.grid(row=0, column=0, sticky="N, S, E, W")
 damageMax.grid(row=0, column=1, sticky="N, S, E, W")
 effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
+
+#--------------------------------------------------------------------------------
 
 root.update_idletasks()
 damageSpellCardWidth = floor((attackCardsCanvasInner.winfo_reqwidth() - attackCardsScroll_y.winfo_reqwidth())/3)
