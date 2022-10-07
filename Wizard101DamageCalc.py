@@ -6,10 +6,11 @@ import json
 
 
 class Spell:
-	def __init__(self, cardName, imgFile, school):
-		self.cardName = cardName
+	def __init__(self, parantWiget, imgFile, cardName, school):
 		self.imgFile = imgFile
 		self.img = ImageTk.PhotoImage(Image.open(imgFile))
+		self.btn = tk.Button(parantWiget, image=self.img)
+		self.cardName = cardName
 		self.school = school
 
 	def imgFileResize(self, newCardWidth):
@@ -22,21 +23,23 @@ class Spell:
 
 		self.img = ImageTk.PhotoImage(baseimage.resize((newCardWidth, hsize), Image.LANCZOS))
 
+		self.btn.config(image=self.img)
+
 
 class DamageSpell(Spell):
-	def __init__(self, cardName, imgFile, school, minAttackVal, maxAttackVal):
-		Spell.__init__(self, cardName, imgFile, school)
+	def __init__(self, parantWiget, imgFile, cardName,  school, minAttackVal, maxAttackVal):
+		Spell.__init__(self, parantWiget, imgFile, cardName, school)
 		self.minAttackVal = minAttackVal
 		self.maxAttackVal = maxAttackVal
 
 class BuffingSpell(Spell):
-	def __init__(self, cardName, imgFile, school, damageBuff):
-		Spell.__init__(self, cardName, imgFile, school)
+	def __init__(self, parantWiget, imgFile, cardName, school, damageBuff):
+		Spell.__init__(self, imgFile, cardName, school)
 		self.damageBuff = damageBuff
 
 class DebuffingSpell(Spell):
-	def __init__(self, cardName, imgFile, school, damageDebuff):
-		Spell.__init__(self, cardName, imgFile, school)
+	def __init__(self, parantWiget, imgFile, cardName, school, damageDebuff):
+		Spell.__init__(self, parantWiget, imgFile, cardName, school)
 		self.damageDebuff = damageDebuff
 
 CardDataBank = json.load(open("Cards.json"))
@@ -80,17 +83,17 @@ effectHistory = tk.Label(damageOutputFrame, textvariable=effectHistoryVar, width
 
 # Attack Cards creation
 damageSpells = []
-attackCardBtns = []
 
 for spell in CardDataBank["DamageSpells"]:
-	newDamageSpell = DamageSpell(spell["name"], spell["imgFile"], spell["school"], spell["minDmg"], spell["maxDmg"])
+	newDamageSpell = DamageSpell(attackCardsFrame, spell["imgFile"], spell["name"], spell["school"], spell["minDmg"], spell["maxDmg"])
 	damageSpells.append(newDamageSpell)
-	newButton = tk.Button(attackCardsFrame, text=spell["name"])
-	attackCardBtns.append(newButton)
 
 
 # BuffsFrameOuter Creation
+# BuffSpells = []
 
+# for spell in CardDataBank["BuffingSpells"]:
+# 	newBuffSpell = BuffingSpell()
 
 # Debufs Creation
 
@@ -144,10 +147,9 @@ cardWidth = floor((attackCardsCanvasInner.winfo_reqwidth() - scroll_y.winfo_reqw
 # Attack Cards placement
 rowIndx = 0
 columnIndx = 0
-for i, Btn in enumerate(attackCardBtns):
-	damageSpells[i].imgFileResize(cardWidth)
-	Btn.configure(image=damageSpells[i].img)
-	Btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
+for spell in damageSpells:
+	spell.imgFileResize(cardWidth)
+	spell.btn.grid(row=rowIndx, column=columnIndx, sticky="N, S, E, W")
 	columnIndx += 1
 	if columnIndx == 3:
 		rowIndx += 1
