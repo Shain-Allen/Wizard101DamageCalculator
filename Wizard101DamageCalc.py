@@ -1,10 +1,7 @@
 from math import floor
 import tkinter as tk
-from turtle import width
 from PIL import Image, ImageTk, ImageOps
 import json
-
-from numpy import append
 
 
 class Spell:
@@ -91,6 +88,23 @@ class DebuffingSpell(Spell):
 		Spell.__init__(self, parantWiget, imgFile, cardName, school)
 		self.damageDebuff = damageDebuff
 
+class ArmorSpec():
+	def __init__(self, baseWidget , schoolName, schoolImgFile):
+		self.Name = schoolName
+		self.imgFile = schoolImgFile
+		self.specHolder = tk.Frame(baseWidget)
+		self.img = ImageTk.PhotoImage(Image.open(schoolImgFile))
+		self.schoolLogo = tk.Label(self.specHolder, image=self.img)
+		self.armorPercent = tk.Entry(self.specHolder)
+		self.armorFlat = tk.Entry(self.specHolder)
+
+	def pack(self):
+		self.specHolder.pack()
+		self.schoolLogo.pack()
+		self.armorPercent.pack()
+		self.armorFlat.pack()
+
+
 CardDataBank = json.load(open("Cards.json"))
 
 spellHistory = []
@@ -136,12 +150,8 @@ damageMinVar.set("0")
 damageMaxVar = tk.StringVar(damageOutputFrame)
 damageMaxVar.set("0")
 
-effectHistoryVar = tk.StringVar(damageOutputFrame)
-effectHistoryVar.set("")
-
 damageMin = tk.Label(damageOutputFrame, textvariable=damageMinVar, borderwidth=2, relief="solid")
 damageMax = tk.Label(damageOutputFrame, textvariable=damageMaxVar, borderwidth=2, relief="solid")
-effectHistory = tk.Label(damageOutputFrame, textvariable=effectHistoryVar, width=50, borderwidth=2, relief="solid")
 
 # Attack Cards creation
 damageSpells = []
@@ -173,8 +183,13 @@ for spell in CardDataBank["DebuffingSpells"]:
 
 
 # Armor Stats creation
-# deathBoost = tk.LabelFrame(armorStatsFrame, text="death boost:")
-# deathBoostIn = tk.Entry(deathBoost, name="death boost: ")
+fireDamage = ArmorSpec(armorStatsFrameOuter, "Fire", "Images/SchoolIcons/Fire-School.gif")
+iceDamage = ArmorSpec(armorStatsFrameOuter, "Ice", "Images/SchoolIcons/Ice-School.gif")
+stormDamage = ArmorSpec(armorStatsFrameOuter, "Storm", "Images/SchoolIcons/Storm-School.gif")
+mythDamage = ArmorSpec(armorStatsFrameOuter, "Myth", "Images/SchoolIcons/Myth-School.gif")
+lifeDamage = ArmorSpec(armorStatsFrameOuter, "Life", "Images/SchoolIcons/Life-School.gif")
+deathDamage = ArmorSpec(armorStatsFrameOuter, "Death", "Images/SchoolIcons/Death-School.gif")
+balanceDamage = ArmorSpec(armorStatsFrameOuter, "Balance", "Images/SchoolIcons/Balance-School.gif")
 
 # -------------------------------------------------------------------------------------------------------
 # place Containers
@@ -217,7 +232,6 @@ armorStatsFrameOuter.grid(row=3, column=0, sticky="N, S, E, W")
 # DamageOutputFrame Placement
 damageMin.grid(row=0, column=0, sticky="N, S, E, W")
 damageMax.grid(row=0, column=1, sticky="N, S, E, W")
-effectHistory.grid(row=1, columnspan=2, sticky="N, S, E, W")
 
 #--------------------------------------------------------------------------------
 
@@ -263,6 +277,13 @@ for spell in debuffSpells:
 
 
 # Armor Stats placement
-#deathBoostIn.grid()
+fireDamage.pack()
+iceDamage.pack()
+stormDamage.pack()
+mythDamage.pack()
+lifeDamage.pack()
+deathDamage.pack()
+balanceDamage.pack()
+
 
 root.mainloop()
