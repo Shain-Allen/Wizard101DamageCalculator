@@ -99,11 +99,22 @@ class ArmorSpec():
 		self.armorFlat = tk.Entry(self.specHolder)
 
 	def pack(self):
-		self.specHolder.pack()
+		self.specHolder.pack(side=tk.LEFT)
 		self.schoolLogo.pack()
 		self.armorPercent.pack()
 		self.armorFlat.pack()
+	
+	def imgFileResize(self, newWidth):
 
+		baseimage = Image.open(self.imgFile)
+
+		wpercent = (newWidth / float(baseimage.width))
+
+		hsize = int(float(baseimage.height) * float(wpercent))
+
+		self.img = ImageTk.PhotoImage(baseimage.resize((newWidth, hsize), Image.LANCZOS))
+
+		self.schoolLogo.config(image=self.img)
 
 CardDataBank = json.load(open("Cards.json"))
 
@@ -276,7 +287,20 @@ for spell in debuffSpells:
 # Inc boost and resist Placement
 
 
+
 # Armor Stats placement
+armorStatsImgWidth = floor(armorStatsFrameOuter.winfo_width()/7)
+
+fireDamage.imgFileResize(armorStatsImgWidth)
+iceDamage.imgFileResize(armorStatsImgWidth)
+stormDamage.imgFileResize(armorStatsImgWidth)
+mythDamage.imgFileResize(armorStatsImgWidth)
+lifeDamage.imgFileResize(armorStatsImgWidth)
+deathDamage.imgFileResize(armorStatsImgWidth)
+balanceDamage.imgFileResize(armorStatsImgWidth)
+
+
+
 fireDamage.pack()
 iceDamage.pack()
 stormDamage.pack()
