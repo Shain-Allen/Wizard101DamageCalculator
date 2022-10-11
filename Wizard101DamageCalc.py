@@ -209,7 +209,7 @@ cardSelectionFrame.grid(row=2, column=0, sticky="N, S, E, W")
 
 #attack card containers + scroll bar configuration
 attackCardsFrameOuter.grid(row=0, column=0, sticky="N, S, E, W")
-attackCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand="yes")
+attackCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand=tk.YES)
 attackCardsScroll_y.pack(side=tk.LEFT, fill="y")
 attackCardsCanvasInner['yscrollcommand'] = attackCardsScroll_y.set
 attackCardsCanvasInner.bind("<Configure>", lambda e: attackCardsCanvasInner.configure(scrollregion=attackCardsCanvasInner.bbox("all")))
@@ -220,7 +220,7 @@ modificationsFrame.grid(row=0, column=1, sticky="N, S, E, W")
 
 #buff Card containers + scroll bar configuration
 buffCardsFrameOuter.grid(row=0, column=0, sticky="N, S, E, W")
-buffCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand="yes")
+buffCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand=tk.YES)
 buffCardsScroll_y.pack(side=tk.LEFT, fill="y")
 buffCardsCanvasInner['yscrollcommand'] = buffCardsScroll_y.set
 buffCardsCanvasInner.bind("<Configure>", lambda e: buffCardsCanvasInner.configure(scrollregion=buffCardsCanvasInner.bbox("all")))
@@ -228,7 +228,7 @@ buffCardsCanvasInner.create_window((0,0), window=buffCardsFrame, anchor="nw")
 
 #debuff Card Containers + scroll bar configuration
 debuffCardsFrameOuter.grid(row=1, column=0, sticky="N, S, E, W")
-debuffCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand="yes")
+debuffCardsCanvasInner.pack(side=tk.RIGHT, fill="y", expand=tk.YES)
 debuffCardsScroll_y.pack(side=tk.LEFT, fill="y")
 debuffCardsCanvasInner['yscrollcommand'] = debuffCardsScroll_y.set
 debuffCardsCanvasInner.bind("<Configure>", lambda e: debuffCardsCanvasInner.configure(scrollregion=debuffCardsCanvasInner.bbox("all")))
