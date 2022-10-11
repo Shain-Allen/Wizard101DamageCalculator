@@ -1,3 +1,4 @@
+from cgitb import text
 from math import floor
 import tkinter as tk
 from PIL import Image, ImageTk, ImageOps
@@ -99,7 +100,7 @@ class ArmorSpec():
 		self.armorFlat = tk.Entry(self.specHolder)
 
 	def pack(self):
-		self.specHolder.pack(side=tk.LEFT)
+		self.specHolder.pack(side=tk.LEFT, expand=tk.FALSE)
 		self.schoolLogo.pack()
 		self.armorPercent.pack()
 		self.armorFlat.pack()
@@ -115,6 +116,8 @@ class ArmorSpec():
 		self.img = ImageTk.PhotoImage(baseimage.resize((newWidth, hsize), Image.LANCZOS))
 
 		self.schoolLogo.config(image=self.img)
+
+		self.specHolder.config(width=newWidth)
 
 CardDataBank = json.load(open("Cards.json"))
 
@@ -298,8 +301,6 @@ mythDamage.imgFileResize(armorStatsImgWidth)
 lifeDamage.imgFileResize(armorStatsImgWidth)
 deathDamage.imgFileResize(armorStatsImgWidth)
 balanceDamage.imgFileResize(armorStatsImgWidth)
-
-
 
 fireDamage.pack()
 iceDamage.pack()
